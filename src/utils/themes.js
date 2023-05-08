@@ -9,7 +9,7 @@ const lightTheme = createTheme({
             main: "#FFFFFF"
         },
         secondary: {
-            main: "#d32f2f"
+            main: "#e81f21"
         },
         background: {
             default: "#FFFFFF",
@@ -20,20 +20,20 @@ const lightTheme = createTheme({
         text: {
             primary: "#0b1d3c",
             secondary: "#9aa2ae",
-            title: "#d32f2f",
-            accent: "rgb(36, 127, 251)"
+            title: "#e81f21",
+            accent: "#f4db4c"
         },
         light: {
             secondary: "#EDF4FF",
             accent: "rgba(211,47,47,0.03)",
         },
         colors: {
-            accent: "rgb(36, 127, 251)",
+            accent: "#f4db4c",
             footer: "#000137"
         },
         icon: {
-            accent: "#d32f2f",
-            secondary: "rgb(36, 127, 251)",
+            accent: "#e81f21",
+            secondary: "#f4db4c",
             accentBackground: "rgba(211,47,47,0.05)",
             secondaryBackground: "rgba(211,47,47,0.05)"
         },
@@ -50,7 +50,7 @@ const darkTheme = createTheme({
             main: "#FFFFFF"
         },
         secondary: {
-            main: "#247FFB"
+            main: "#e81f21"
         },
         background: {
             default: "#1b1a1a",
@@ -62,22 +62,22 @@ const darkTheme = createTheme({
         text: {
             primary: "#fdfdfd",
             secondary: "rgba(255,255,255,0.55)",
-            title: "#3d7df6",
-            accent: "#c89743"
+            title: "#e81f21",
+            accent: "#f4db4c"
         },
         light: {
-            secondary: "rgba(36,127,251,0.3)",
+            secondary: "rgba(232,31,33,0.3)",
             accent: "rgba(251,160,36,0.3)"
         },
         colors: {
-            accent: "#FBA024",
+            accent: "#f4db4c",
             footer: "#000137"
         },
         icon: {
-            accent: "#c89743",
-            secondary: "#247FFB",
-            accentBackground: "rgba(200,151,67,0.05)",
-            secondaryBackground: "rgba(36,127,251,0.05)"
+            accent: "#f4db4c",
+            secondary: "#e81f21",
+            accentBackground: "rgba(244,219,76,0.05)",
+            secondaryBackground: "rgba(232,31,33,0.05)"
         },
         mode: "dark",
     }
