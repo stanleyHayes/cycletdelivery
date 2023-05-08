@@ -5,7 +5,12 @@ import logo from "./../../assets/images/logo/logo.png";
 const Banner = () => {
 
     return (
-        <Box sx={{width: "100%", minHeight: "50vh", alignItems: "center", display: "flex"}}>
+        <Box sx={{
+            width: "100%",
+            minHeight: "50vh",
+            alignItems: "center",
+            display: "flex"
+        }}>
             <Container maxWidth="lg">
                 <Grid container={true} spacing={4} alignItems="center" justifyContent="space-between">
                     <Grid item={true} xs={12} md={6}>
@@ -48,7 +53,8 @@ const Banner = () => {
                                 <Box>
                                     <Grid container={true} spacing={2}>
                                         <Grid item={true} xs={12} md={4}>
-                                            <ScrollLink to="contact" smooth={true} spy={true} offset={50} duration={500} delay={100}>
+                                            <ScrollLink to="contact" smooth={true} spy={true} offset={50} duration={500}
+                                                        delay={100}>
                                                 <Button
                                                     fullWidth={true}
                                                     size="large"
@@ -66,7 +72,8 @@ const Banner = () => {
                                             </ScrollLink>
                                         </Grid>
                                         <Grid item={true} xs={12} md={4}>
-                                            <ScrollLink to="order" smooth={true} spy={true} offset={50} duration={500} delay={100}>
+                                            <ScrollLink to="order" smooth={true} spy={true} offset={50} duration={500}
+                                                        delay={100}>
                                                 <Button
                                                     fullWidth={true}
                                                     size="large"
@@ -91,20 +98,20 @@ const Banner = () => {
                         </Box>
                     </Grid>
                     <Grid item={true} xs={12} md={6}>
-                                        <CardMedia
-                                            component="img"
-                                            src={logo}
-                                            sx={{
-                                                borderTopLeftRadius: 64,
-                                                borderTopRightRadius: 0,
-                                                borderBottomRightRadius: 64,
-                                                borderBottomLeftRadius: 0,
-                                                objectFit: "cover",
-                                                objectPosition: "center",
-                                                width: "100%",
-                                                height: {xs: 250, lg: 350}
-                                            }}
-                                        />
+                        <CardMedia
+                            component="img"
+                            src={logo}
+                            sx={{
+                                borderTopLeftRadius: 64,
+                                borderTopRightRadius: 0,
+                                borderBottomRightRadius: 64,
+                                borderBottomLeftRadius: 0,
+                                objectFit: "cover",
+                                objectPosition: "center",
+                                width: "100%",
+                                height: {xs: 250, lg: 350}
+                            }}
+                        />
                     </Grid>
                 </Grid>
             </Container>

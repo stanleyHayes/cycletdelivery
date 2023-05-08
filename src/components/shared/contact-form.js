@@ -1,10 +1,11 @@
 import {
+    Alert, AlertTitle,
     Box,
     Button,
     Card,
     CardContent,
     FormControl,
-    FormHelperText,
+    FormHelperText, LinearProgress,
     OutlinedInput,
     Stack,
     Typography
@@ -12,9 +13,14 @@ import {
 import {useFormik} from "formik";
 import * as yup from "yup";
 import {CallOutlined, CloseOutlined, CommentOutlined, MailOutlined, Person2Outlined} from "@mui/icons-material";
+import {send} from "@emailjs/browser";
+import {useState} from "react";
 
 const ContactForm = () => {
 
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const [message, setMessage] = useState(null);
     const formik = useFormik({
         initialValues: {name: "", email: "", phone: "", message: ""},
         validationSchema: yup.object().shape({
@@ -22,7 +28,20 @@ const ContactForm = () => {
             email: yup.string().email("Enter valid email").required("Field required"),
             phone: yup.string().required("Field required"),
             message: yup.string().required("Field required"),
-        })
+        }),
+        onSubmit: (values, formikHelpers) => {
+            setLoading(true);
+            send('service_pt3yy1l', 'template_f2ua3fa', {...values}, 'Yme5TJatDFv8uY0sm').then(() => {
+                setMessage("We have received your message and we will respond to it ASAP!");
+                formikHelpers.resetForm();
+                setLoading(false);
+                setError(null);
+            }).catch(error => {
+                setLoading(false);
+                setMessage(null);
+                setError(error);
+            });
+        }
     });
 
     return (
@@ -30,9 +49,20 @@ const ContactForm = () => {
             variant="elevation"
             sx={{borderRadius: 8, backgroundColor: "background.paper"}}
             elevation={0}>
+            {loading && <LinearProgress variant="query" color="secondary" />}
             <CardContent>
                 <form onSubmit={formik.handleSubmit}>
                     <Stack direction="column" spacing={2}>
+                        {error && (
+                            <Alert severity="error" variant="standard">
+                                <AlertTitle>{error}</AlertTitle>
+                            </Alert>
+                        )}
+                        {message && (
+                            <Alert severity="success" variant="standard">
+                                <AlertTitle>{message}</AlertTitle>
+                            </Alert>
+                        )}
                         <Typography
                             variant="h5"
                             sx={{color: "text.primary", fontWeight: 700, mb: 3, fontFamily: "SatrevaNova"}}>
@@ -115,7 +145,7 @@ const ContactForm = () => {
                                     name="phone"
                                     sx={{borderRadius: 2}}
                                     startAdornment={
-                                    <CallOutlined sx={{fontSize: 20, mr: 2}} color="secondary"/>}
+                                        <CallOutlined sx={{fontSize: 20, mr: 2}} color="secondary"/>}
                                     type="tel"
                                     required={true}
                                     size="medium"
@@ -142,7 +172,8 @@ const ContactForm = () => {
                                     placeholder="Your Message"
                                     name="message"
                                     sx={{borderRadius: 2}}
-                                    startAdornment={<CommentOutlined sx={{fontSize: 20, mr: 2, verticalAlign: "top"}} color="secondary"/>}
+                                    startAdornment={<CommentOutlined sx={{fontSize: 20, mr: 2, verticalAlign: "top"}}
+                                                                     color="secondary"/>}
                                     type="text"
                                     required={true}
                                     size="medium"

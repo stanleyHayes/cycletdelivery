@@ -1,11 +1,12 @@
 import {
+    Alert, AlertTitle,
     Box,
     Button,
     Card,
     CardContent,
     FormControl,
     FormHelperText,
-    Grid,
+    Grid, LinearProgress,
     MenuItem,
     OutlinedInput,
     Select,
@@ -15,8 +16,14 @@ import {
 import {useFormik} from "formik";
 import * as yup from "yup";
 import {CallOutlined, CloseOutlined, LocationOnOutlined, MailOutlined, Person2Outlined} from "@mui/icons-material";
+import {send} from "@emailjs/browser";
+import {useState} from "react";
 
 const OrderForm = () => {
+
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const [message, setMessage] = useState(null);
 
     const formik = useFormik({
         initialValues: {name: "", email: "", phone: "", message: ""},
@@ -27,19 +34,43 @@ const OrderForm = () => {
             category: yup.string().required("Field required"),
             location: yup.string().required("Field required"),
             vendor: yup.string().required("Field required"),
-        })
+        }),
+        onSubmit: (values, formikHelpers) => {
+            setLoading(true);
+            send('service_b56pwhf', 'template_x5plyzs', {...values}, 'Yme5TJatDFv8uY0sm').then(() => {
+                setMessage("Thank you for doing business with us.");
+                formikHelpers.resetForm();
+                setLoading(false);
+                setError(null);
+            }).catch(error => {
+                setLoading(false);
+                setMessage(null);
+                setError(error);
+            });
+        }
     });
 
     return (
-        <Grid container={true} spacing={4}>
-            <Grid item={true} xs={12} md={6}>
-                <Card
-                    variant="elevation"
-                    sx={{borderRadius: 4, backgroundColor: "background.paper"}}
-                    elevation={0}>
-                    <CardContent>
-                        <form onSubmit={formik.handleSubmit}>
+        <form onSubmit={formik.handleSubmit}>
+            <Grid container={true} spacing={4}>
+                <Grid item={true} xs={12} md={6}>
+                    <Card
+                        variant="elevation"
+                        sx={{borderRadius: 4, backgroundColor: "background.paper"}}
+                        elevation={0}>
+                        {loading && <LinearProgress variant="query" color="secondary"/>}
+                        <CardContent>
                             <Stack direction="column" spacing={2}>
+                                {error && (
+                                    <Alert severity="error" variant="standard">
+                                        <AlertTitle>{error}</AlertTitle>
+                                    </Alert>
+                                )}
+                                {message && (
+                                    <Alert severity="success" variant="standard">
+                                        <AlertTitle>{message}</AlertTitle>
+                                    </Alert>
+                                )}
                                 <Typography
                                     variant="h5"
                                     sx={{color: "text.primary", fontWeight: 700, mb: 3, fontFamily: "SatrevaNova"}}>
@@ -146,137 +177,140 @@ const OrderForm = () => {
                                     </FormControl>
                                 </Box>
                             </Stack>
-                        </form>
-                    </CardContent>
-                </Card>
-            </Grid>
-            <Grid item={true} xs={12} md={6}>
-                <Card
-                    variant="elevation"
-                    sx={{borderRadius: 4, backgroundColor: "background.paper"}}
-                    elevation={0}>
-                    <CardContent>
-                        <form onSubmit={formik.handleSubmit}>
-                            <Stack direction="column" spacing={2}>
-                                <Typography
-                                    variant="h5"
-                                    sx={{color: "text.primary", fontWeight: 700, mb: 3, fontFamily: "SatrevaNova"}}>
-                                    Order{" "}
+                        </CardContent>
+                    </Card>
+                </Grid>
+                <Grid item={true} xs={12} md={6}>
+                    <Card
+                        variant="elevation"
+                        sx={{borderRadius: 4, backgroundColor: "background.paper"}}
+                        elevation={0}>
+                        <CardContent>
+                            <form onSubmit={formik.handleSubmit}>
+                                <Stack direction="column" spacing={2}>
                                     <Typography
-                                        component="span"
                                         variant="h5"
-                                        sx={{
-                                            color: "secondary.main",
-                                            fontWeight: 700,
-                                            mb: 3,
-                                            fontFamily: "SatrevaNova"
-                                        }}>
-                                        Information
-                                    </Typography>
-                                </Typography>
-                                <Box>
-                                    <Typography variant="body2" sx={{color: "text.primary", fontWeight: 700, mb: 1}}>
-                                        Category
+                                        sx={{color: "text.primary", fontWeight: 700, mb: 3, fontFamily: "SatrevaNova"}}>
+                                        Order{" "}
+                                        <Typography
+                                            component="span"
+                                            variant="h5"
+                                            sx={{
+                                                color: "secondary.main",
+                                                fontWeight: 700,
+                                                mb: 3,
+                                                fontFamily: "SatrevaNova"
+                                            }}>
+                                            Information
+                                        </Typography>
                                     </Typography>
                                     <Box>
-                                        <FormControl fullWidth={true}>
-                                            <Select
+                                        <Typography variant="body2"
+                                                    sx={{color: "text.primary", fontWeight: 700, mb: 1}}>
+                                            Category
+                                        </Typography>
+                                        <Box>
+                                            <FormControl fullWidth={true}>
+                                                <Select
+                                                    size="medium"
+                                                    id="category"
+                                                    name="category"
+                                                    fullWidth={true}
+                                                    value={formik.values.category}
+                                                    error={formik.touched.category && Boolean(formik.errors.category)}
+                                                    onChange={formik.handleChange}
+                                                    onBlur={formik.handleBlur}>
+                                                    <MenuItem value="">Select Input</MenuItem>
+                                                    <MenuItem value="Student">Student</MenuItem>
+                                                    <MenuItem value="Lecturer">Lecturer</MenuItem>
+                                                    <MenuItem value="Other">Other</MenuItem>
+                                                </Select>
+                                                {formik.touched.category && formik.errors.category && (
+                                                    <FormHelperText>
+                                                        {formik.errors.category}
+                                                    </FormHelperText>
+                                                )}
+                                            </FormControl>
+                                        </Box>
+                                    </Box>
+                                    <Box>
+                                        <Typography variant="body2"
+                                                    sx={{color: "text.primary", fontWeight: 700, mb: 1}}>
+                                            Location
+                                        </Typography>
+                                        <FormControl fullWidth={true} variant="outlined">
+                                            <OutlinedInput
+                                                value={formik.values.location}
+                                                placeholder="Your location"
+                                                name="location"
+                                                sx={{borderRadius: 2}}
+                                                startAdornment={<LocationOnOutlined sx={{fontSize: 20, mr: 2}}
+                                                                                    color="secondary"/>}
+                                                type="text"
+                                                required={true}
                                                 size="medium"
-                                                id="category"
-                                                name="category"
-                                                fullWidth={true}
-                                                value={formik.values.category}
-                                                error={formik.touched.category && Boolean(formik.errors.category)}
+                                                onBlur={formik.handleBlur}
                                                 onChange={formik.handleChange}
-                                                onBlur={formik.handleBlur}>
-                                                <MenuItem value="">Select Input</MenuItem>
-                                                <MenuItem value="Student">Student</MenuItem>
-                                                <MenuItem value="Lecturer">Lecturer</MenuItem>
-                                                <MenuItem value="Other">Other</MenuItem>
-                                            </Select>
-                                            {formik.touched.category && formik.errors.category && (
+                                                error={Boolean(formik.touched.location && formik.errors.location)}
+                                                fullWidth={true}
+                                            />
+                                            {formik.touched.phone && formik.errors.location && (
                                                 <FormHelperText>
-                                                    {formik.errors.category}
+                                                    {formik.touched.location && formik.errors.location}
                                                 </FormHelperText>
                                             )}
                                         </FormControl>
                                     </Box>
-                                </Box>
-                                <Box>
-                                    <Typography variant="body2" sx={{color: "text.primary", fontWeight: 700, mb: 1}}>
-                                        Location
-                                    </Typography>
-                                    <FormControl fullWidth={true} variant="outlined">
-                                        <OutlinedInput
-                                            value={formik.values.location}
-                                            placeholder="Your location"
-                                            name="location"
-                                            sx={{borderRadius: 2}}
-                                            startAdornment={<LocationOnOutlined sx={{fontSize: 20, mr: 2}}
-                                                                                color="secondary"/>}
-                                            type="text"
-                                            required={true}
-                                            size="medium"
-                                            onBlur={formik.handleBlur}
-                                            onChange={formik.handleChange}
-                                            error={Boolean(formik.touched.location && formik.errors.location)}
-                                            fullWidth={true}
-                                        />
-                                        {formik.touched.phone && formik.errors.location && (
-                                            <FormHelperText>
-                                                {formik.touched.location && formik.errors.location}
-                                            </FormHelperText>
-                                        )}
-                                    </FormControl>
-                                </Box>
 
-                                <Box>
-                                    <Typography variant="body2" sx={{color: "text.primary", fontWeight: 700, mb: 1}}>
-                                        Vendor
-                                    </Typography>
-                                    <FormControl fullWidth={true}>
-                                        <Select
-                                            size="medium"
-                                            id="vendor"
-                                            name="vendor"
-                                            fullWidth={true}
-                                            type="text"
-                                            value={formik.values.vendor}
-                                            error={formik.touched.vendor && Boolean(formik.errors.vendor)}
-                                            onChange={formik.handleChange}
-                                            onBlur={formik.handleBlur}>
-                                            <MenuItem value="">Select Vendor</MenuItem>
-                                            <MenuItem value="Student">Wafflemania</MenuItem>
-                                            <MenuItem value="Lecturer">Cafetaria</MenuItem>
-                                        </Select>
-                                        {formik.touched.vendor && formik.errors.vendor && (
-                                            <FormHelperText>
-                                                {formik.errors.vendor}
-                                            </FormHelperText>
-                                        )}
-                                    </FormControl>
-                                </Box>
-                                <Button
-                                    type="submit"
-                                    fullWidth={true}
-                                    size="large"
-                                    disableElevation={true}
-                                    sx={{
-                                        textTransform: "capitalize",
-                                        color: "white",
-                                        borderRadius: 2,
-                                        fontWeight: 700,
-                                        backgroundColor: "secondary.main",
-                                        fontFamily: "SatrevaNova"
-                                    }}>
-                                    Place Order
-                                </Button>
-                            </Stack>
-                        </form>
-                    </CardContent>
-                </Card>
+                                    <Box>
+                                        <Typography variant="body2"
+                                                    sx={{color: "text.primary", fontWeight: 700, mb: 1}}>
+                                            Vendor
+                                        </Typography>
+                                        <FormControl fullWidth={true}>
+                                            <Select
+                                                size="medium"
+                                                id="vendor"
+                                                name="vendor"
+                                                fullWidth={true}
+                                                type="text"
+                                                value={formik.values.vendor}
+                                                error={formik.touched.vendor && Boolean(formik.errors.vendor)}
+                                                onChange={formik.handleChange}
+                                                onBlur={formik.handleBlur}>
+                                                <MenuItem value="">Select Vendor</MenuItem>
+                                                <MenuItem value="Student">Wafflemania</MenuItem>
+                                                <MenuItem value="Lecturer">Cafeteria</MenuItem>
+                                            </Select>
+                                            {formik.touched.vendor && formik.errors.vendor && (
+                                                <FormHelperText>
+                                                    {formik.errors.vendor}
+                                                </FormHelperText>
+                                            )}
+                                        </FormControl>
+                                    </Box>
+                                    <Button
+                                        type="submit"
+                                        fullWidth={true}
+                                        size="large"
+                                        disableElevation={true}
+                                        sx={{
+                                            textTransform: "capitalize",
+                                            color: "white",
+                                            borderRadius: 2,
+                                            fontWeight: 700,
+                                            backgroundColor: "secondary.main",
+                                            fontFamily: "SatrevaNova"
+                                        }}>
+                                        Place Order
+                                    </Button>
+                                </Stack>
+                            </form>
+                        </CardContent>
+                    </Card>
+                </Grid>
             </Grid>
-        </Grid>
+        </form>
     )
 }
 

@@ -37,12 +37,15 @@ const Layout = ({children}) => {
                     maxWidth: "100vw",
                     display: "flex",
                     flexDirection: "column",
-                    overflowX: "hidden"
+                    overflowX: "hidden",
+                    "&:--webkit-scrollbar": {
+                        display: "none"
+                    }
                 }}>
                     <Box>
                         <Header/>
                     </Box>
-                    <Box sx={{flexGrow: 1, backgroundColor: "background.default", pt: 8.3}}>
+                    <Box sx={{flexGrow: 1, backgroundColor: "background.default", pt: 8}}>
                         {children}
                     </Box>
                     <Box>

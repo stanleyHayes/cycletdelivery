@@ -14,7 +14,7 @@ const HomePage = () => {
     return (
         <Layout>
             <Element name="home">
-                <AnimatedSection>
+                <AnimatedSection backgroundColor="light.secondary">
                     <Banner/>
                 </AnimatedSection>
             </Element>

@@ -15,6 +15,7 @@ const NavigationLink = ({path, label}) => {
                 <Typography
                     variant="body2"
                     sx={{
+                        cursor: "pointer",
                         fontWeight: 500,
                         color: pathname === path ? "colors.accent" : "text.secondary",
                         "&:hover": {

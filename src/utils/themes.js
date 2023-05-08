@@ -9,7 +9,7 @@ const lightTheme = createTheme({
             main: "#FFFFFF"
         },
         secondary: {
-            main: "#247FFB"
+            main: "#d32f2f"
         },
         background: {
             default: "#FFFFFF",
@@ -20,22 +20,22 @@ const lightTheme = createTheme({
         text: {
             primary: "#0b1d3c",
             secondary: "#9aa2ae",
-            title: "#3d7df6",
-            accent: "#c89743"
+            title: "#d32f2f",
+            accent: "rgb(36, 127, 251)"
         },
         light: {
             secondary: "#EDF4FF",
-            accent: "rgba(251,160,36,0.3)",
+            accent: "rgba(211,47,47,0.03)",
         },
         colors: {
-            accent: "#FBA024",
+            accent: "rgb(36, 127, 251)",
             footer: "#000137"
         },
         icon: {
-            accent: "#c89743",
-            secondary: "#247FFB",
-            accentBackground: "rgba(200,151,67,0.05)",
-            secondaryBackground: "rgba(36,127,251,0.05)"
+            accent: "#d32f2f",
+            secondary: "rgb(36, 127, 251)",
+            accentBackground: "rgba(211,47,47,0.05)",
+            secondaryBackground: "rgba(211,47,47,0.05)"
         },
         mode: "light",
     }
